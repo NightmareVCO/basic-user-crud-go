@@ -6,9 +6,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"api/models"
+	"api/repositories"
+
 	"github.com/gorilla/mux"
-	"github.com/nightmareVCO/user-crud-go-nextjs/models"
-	"github.com/nightmareVCO/user-crud-go-nextjs/repositories"
 )
 
 type UserHandler struct {

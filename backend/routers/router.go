@@ -1,8 +1,9 @@
 package routers
 
 import (
+	"api/handlers"
+
 	"github.com/gorilla/mux"
-	"github.com/nightmareVCO/user-crud-go-nextjs/handlers"
 )
 
 func SetupRouter(userHandler *handlers.UserHandler) *mux.Router {

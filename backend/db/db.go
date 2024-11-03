@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/nightmareVCO/user-crud-go-nextjs/config"
+	"api/config"
 )
 
 type Database struct {

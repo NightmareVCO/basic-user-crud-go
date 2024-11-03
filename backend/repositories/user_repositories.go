@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/nightmareVCO/user-crud-go-nextjs/models"
+	"api/models"
 )
 
 type UserRepository interface {

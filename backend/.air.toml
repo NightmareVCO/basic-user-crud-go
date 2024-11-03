@@ -1,9 +1,9 @@
 # Config file for Air
 [build]
   # Command to build the app
-  cmd = "go build -o github.com/nightmareVCO/user-crud-go-nextjs ."
+  cmd = "go build -o api ."
   # Binary to watch
-  bin = "github.com/nightmareVCO/user-crud-go-nextjs"
+  bin = "api"
   # Working directory
   dir = "."
   # Patterns to watch
@@ -11,7 +11,7 @@
   # Exclude files
   exclude_dir = ["vendor"]
   # Command to run after build
-  run_after_build = "chmod +x github.com/nightmareVCO/user-crud-go-nextjs"
+  run_after_build = "chmod +x api"
 
 [log]
 level = "debug"

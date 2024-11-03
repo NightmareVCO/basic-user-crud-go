@@ -4,13 +4,19 @@ import (
 	"log"
 	"net/http"
 
+	"api/db"
+
+	"api/config"
+
+	"api/middlewares"
+
+	"api/repositories"
+
+	"api/routers"
+
+	"api/handlers"
+
 	_ "github.com/lib/pq"
-	"github.com/nightmareVCO/user-crud-go-nextjs/config"
-	"github.com/nightmareVCO/user-crud-go-nextjs/db"
-	"github.com/nightmareVCO/user-crud-go-nextjs/handlers"
-	"github.com/nightmareVCO/user-crud-go-nextjs/middlewares"
-	"github.com/nightmareVCO/user-crud-go-nextjs/repositories"
-	"github.com/nightmareVCO/user-crud-go-nextjs/routers"
 )
 
 type User struct {

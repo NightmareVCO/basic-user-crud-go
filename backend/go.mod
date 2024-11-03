@@ -1,4 +1,4 @@
-module github.com/nightmareVCO/user-crud-go-nextjs
+module api
 
 go 1.23.2
 

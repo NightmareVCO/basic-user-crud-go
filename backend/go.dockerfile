@@ -13,9 +13,9 @@ COPY . .
 RUN go get -v ./...
 
 # Build the Go app
-# RUN go build -o github.com/nightmareVCO/user-crud-go-nextjs .
+# RUN go build -o api .
 
 EXPOSE 8000
 
 CMD ["air", "-c", ".air.toml"]  
-# CMD ["./github.com/nightmareVCO/user-crud-go-nextjs"]
+# CMD ["./api"]

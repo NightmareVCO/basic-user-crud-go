@@ -23,7 +23,6 @@ export default async function UserInterface({
   const urlToFetch = query
     ? `${apiUrl}/${backendName}/users?q=${query}`
     : `${apiUrl}/${backendName}/users`;
-  console.log(urlToFetch);
 
   const response = await fetch(urlToFetch, { cache: "no-cache" });
   const users: User[] = await response.json();

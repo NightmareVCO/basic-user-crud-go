@@ -5,12 +5,15 @@ WORKDIR /app
 RUN go install github.com/air-verse/air@latest
 
 # Instala git
-RUN apk add --no-cache git
+COPY go.mod go.sum ./
+
+# Descarga las dependencias
+RUN go mod download
 
 COPY . .
 
-# Download and install the dependencies
-RUN go get -v ./...
+# Si hay dependencias que deben ser instaladas, puedes usar esto
+RUN go mod tidy
 
 # Build the Go app
 # RUN go build -o api .

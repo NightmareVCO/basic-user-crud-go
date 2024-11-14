@@ -25,7 +25,7 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export function useUserModal() {
+export function useUserModal(currentUserAccessToken: string) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   // eslint-disable-next-line unicorn/no-useless-undefined
   const [error, action, isPending] = useActionState(createUser, undefined);
@@ -40,12 +40,12 @@ export function useUserModal() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-
       startTransition(() => {
-        action(formData);
+        action({
+          name: values.name,
+          email: values.email,
+          currentUserAccessToken,
+        });
       });
 
       toast.success("User created successfully", {
@@ -69,9 +69,13 @@ export function useUserModal() {
   };
 }
 
-export default function UserModal() {
+export default function UserModal({
+  currentUserAccessToken,
+}: {
+  currentUserAccessToken: string;
+}) {
   const { form, isPending, error, isOpen, onOpen, onOpenChange, onSubmit } =
-    useUserModal();
+    useUserModal(currentUserAccessToken);
   const {
     register,
     handleSubmit,
@@ -93,6 +97,12 @@ export default function UserModal() {
         <ModalContent>
           {(onClose) => (
             <form id="createUserForm" onSubmit={handleSubmit(onSubmit)}>
+              {/* <input
+                sr-only
+                type="hidden"
+                name="currentUserAccessToken"
+                value={currentUserAccessToken}
+              /> */}
               <ModalHeader className="flex flex-col gap-1">
                 Create a new user
               </ModalHeader>

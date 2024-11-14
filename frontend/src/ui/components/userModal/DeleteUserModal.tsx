@@ -13,7 +13,7 @@ import {
 import { startTransition, useActionState } from "react";
 import { toast } from "sonner";
 
-export function useDeleteModal() {
+export function useDeleteModal(currentUserAccessToken: string) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   // eslint-disable-next-line unicorn/no-useless-undefined
   const [error, action, isPending] = useActionState(deleteUser, undefined);
@@ -21,7 +21,10 @@ export function useDeleteModal() {
   const onPress = async (id: number) => {
     try {
       startTransition(() => {
-        action(id);
+        action({
+          id,
+          currentUserAccessToken,
+        });
       });
 
       toast.success("User deleted successfully", {
@@ -30,7 +33,7 @@ export function useDeleteModal() {
 
       setTimeout(() => {
         globalThis.location.reload();
-      }, 800);
+      }, 600);
 
       onClose();
     } catch (error) {
@@ -48,9 +51,15 @@ export function useDeleteModal() {
   };
 }
 
-export default function DeleteModal({ id }: { id: number }) {
+export default function DeleteModal({
+  id,
+  currentUserAccessToken,
+}: {
+  id: number;
+  currentUserAccessToken: string;
+}) {
   const { isPending, error, isOpen, onOpen, onOpenChange, onPress } =
-    useDeleteModal();
+    useDeleteModal(currentUserAccessToken);
 
   return (
     <>

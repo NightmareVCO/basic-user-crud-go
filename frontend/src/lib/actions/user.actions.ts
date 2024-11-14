@@ -5,17 +5,22 @@ const BACKEND_NAME = "go";
 
 export async function createUser(
   previousState: "Error creating user" | null | undefined | null,
-  formData: FormData,
+  payloads: {
+    name: string;
+    email: string;
+    currentUserAccessToken: string;
+  },
 ) {
   const apiUrl = process.env.PUBLIC_API_URL ?? "http://localhost:8000/api";
   const urlToFetch = `${apiUrl}/${BACKEND_NAME}/users`;
-  const { name, email } = Object.fromEntries(formData);
+  const { name, email, currentUserAccessToken } = payloads;
 
   try {
     const response = await fetch(urlToFetch, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUserAccessToken}`,
       },
       body: JSON.stringify({ name, email }),
       cache: "force-cache",
@@ -33,8 +38,10 @@ export async function createUser(
 
 export async function deleteUser(
   previousState: "Error deleting user" | null | undefined | null,
-  id: number,
+  payload: { id: number; currentUserAccessToken: string },
 ) {
+  const { id, currentUserAccessToken } = payload;
+
   const apiUrl = process.env.PUBLIC_API_URL ?? "http://localhost:8000/api";
   const urlToFetch = `${apiUrl}/${BACKEND_NAME}/users/${id}`;
 
@@ -42,6 +49,10 @@ export async function deleteUser(
     const response = await fetch(urlToFetch, {
       method: "DELETE",
       cache: "force-cache",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUserAccessToken}`,
+      },
     });
 
     if (!response.status || response.status === 204) {
@@ -56,10 +67,15 @@ export async function deleteUser(
 
 export async function updateUser(
   previousState: "Error updating user" | null | undefined | null,
-  formData: FormData,
+  payload: {
+    id: number;
+    name: string;
+    email: string;
+    currentUserAccessToken: string;
+  },
 ) {
   const apiUrl = process.env.PUBLIC_API_URL ?? "http://localhost:8000/api";
-  const { id, name, email } = Object.fromEntries(formData);
+  const { id, name, email, currentUserAccessToken } = payload;
 
   const urlToFetch = `${apiUrl}/${BACKEND_NAME}/users/${id}`;
 
@@ -68,6 +84,7 @@ export async function updateUser(
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUserAccessToken}`,
       },
       body: JSON.stringify({ name, email }),
       cache: "force-cache",

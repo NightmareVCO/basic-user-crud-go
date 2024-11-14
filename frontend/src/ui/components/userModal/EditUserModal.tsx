@@ -2,6 +2,7 @@
 
 import { updateUser } from "@actions/user.actions";
 import Button from "@components/button/Button";
+import type { User } from "@data/user.data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Input,
@@ -17,8 +18,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import type { User } from "../userInterface/UserInterface";
-
 const formSchema = z.object({
   id: z.number(),
   name: z
@@ -28,7 +27,13 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export function useEditModal({ user }: { user: User }) {
+export function useEditModal({
+  user,
+  currentUserAccessToken,
+}: {
+  user: User;
+  currentUserAccessToken: string;
+}) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   // eslint-disable-next-line unicorn/no-useless-undefined
   const [error, action, isPending] = useActionState(updateUser, undefined);
@@ -44,13 +49,13 @@ export function useEditModal({ user }: { user: User }) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const formData = new FormData();
-      formData.append("id", values.id.toString());
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-
       startTransition(() => {
-        action(formData);
+        action({
+          id: values.id,
+          name: values.name,
+          email: values.email,
+          currentUserAccessToken,
+        });
       });
 
       toast.success("User updated successfully", {
@@ -79,9 +84,15 @@ export function useEditModal({ user }: { user: User }) {
   };
 }
 
-export default function EditModal({ user }: { user: User }) {
+export default function EditModal({
+  user,
+  currentUserAccessToken,
+}: {
+  user: User;
+  currentUserAccessToken: string;
+}) {
   const { form, isPending, error, isOpen, onOpen, onOpenChange, onSubmit } =
-    useEditModal({ user });
+    useEditModal({ user, currentUserAccessToken });
   const {
     register,
     handleSubmit,

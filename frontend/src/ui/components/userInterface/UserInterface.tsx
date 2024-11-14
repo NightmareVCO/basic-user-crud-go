@@ -2,30 +2,24 @@
 
 import NoUserCard from "@components/noUserCard/NoUserCard";
 import UserCardRender from "@components/userCardRender/UserCardRender";
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  status: boolean;
-}
+import { getUsers } from "@data/user.data";
 
 interface UserInterfaceProperties {
   backendName: "go" | "node" | "python";
-  query: string | string[] | undefined;
+  query: string;
+  userAccessToken: string;
 }
 
 export default async function UserInterface({
   backendName,
   query,
+  userAccessToken,
 }: UserInterfaceProperties) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
-  const urlToFetch = query
-    ? `${apiUrl}/${backendName}/users?q=${query}`
-    : `${apiUrl}/${backendName}/users`;
-
-  const response = await fetch(urlToFetch, { cache: "no-cache" });
-  const users: User[] = await response.json();
+  const users = await getUsers({
+    backendName,
+    query: query as string,
+    userAccessToken,
+  });
 
   return (
     <>
@@ -33,7 +27,10 @@ export default async function UserInterface({
         <NoUserCard />
       ) : (
         <section className="w-full px-10">
-          <UserCardRender users={users} />
+          <UserCardRender
+            users={users}
+            currentUserAccessToken={userAccessToken}
+          />
         </section>
       )}
     </>

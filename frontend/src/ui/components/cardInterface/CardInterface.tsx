@@ -1,12 +1,18 @@
 "use client";
 
-import type { User } from "@components/userInterface/UserInterface";
 import DeleteModal from "@components/userModal/DeleteUserModal";
 import EditModal from "@components/userModal/EditUserModal";
+import type { User } from "@data/user.data";
 import { Card, CardBody, CardFooter, Divider, Image } from "@nextui-org/react";
 import { Suspense } from "react";
 
-export default function CardInterface({ user }: { user: User }) {
+export default function CardInterface({
+  user,
+  currentUserAccessToken,
+}: {
+  user: User;
+  currentUserAccessToken: string;
+}) {
   return (
     <Card className="w-full col-span-10 lg:col-span-1">
       <CardBody className="flex flex-row gap-3">
@@ -25,10 +31,16 @@ export default function CardInterface({ user }: { user: User }) {
       <Divider />
       <CardFooter className="flex flex-col gap-y-4 justify-evenly xs:flex-row">
         <Suspense>
-          <DeleteModal id={user.id} />
+          <DeleteModal
+            id={user.id}
+            currentUserAccessToken={currentUserAccessToken}
+          />
         </Suspense>
         <Suspense>
-          <EditModal user={user} />
+          <EditModal
+            user={user}
+            currentUserAccessToken={currentUserAccessToken}
+          />
         </Suspense>
       </CardFooter>
     </Card>

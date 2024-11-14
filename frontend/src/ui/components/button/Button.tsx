@@ -6,7 +6,14 @@ import {
 } from "@nextui-org/react";
 import type { ReactNode } from "react";
 
-type ButtonType = "add" | "delete" | "edit" | "save" | "cancel" | "back";
+type ButtonType =
+  | "add"
+  | "delete"
+  | "edit"
+  | "save"
+  | "cancel"
+  | "back"
+  | "next";
 
 const getIcon = (buttonType: ButtonType) => {
   const iconProperties = {
@@ -34,8 +41,11 @@ const getIcon = (buttonType: ButtonType) => {
     case "back": {
       return <Icon {...iconProperties} icon="solar:arrow-left-linear" />;
     }
-    default: {
+    case "next": {
       return <Icon {...iconProperties} icon="solar:arrow-right-linear" />;
+    }
+    default: {
+      return;
     }
   }
 };

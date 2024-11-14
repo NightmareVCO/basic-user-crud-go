@@ -5,14 +5,13 @@ import (
 	"net/http"
 
 	"api/db"
+	"api/routers"
 
 	"api/config"
 
 	"api/middlewares"
 
 	"api/repositories"
-
-	"api/routers"
 
 	"api/handlers"
 
@@ -34,11 +33,27 @@ func main() {
 	defer database.Close()
 
 	userRepo := repositories.NewUserRepository(database)
-	userHandler := handlers.NewUserHandler(userRepo)
+	teamRepo := repositories.NewTeamRepository(database)
+	profileRepo := repositories.NewProfileRepository(database)
 
-	router := routers.SetupRouter(userHandler)
-	enhancedRouter := middlewares.EnableCORS(middlewares.JsonContentTypeMiddleware(router))
+	userHandler := handlers.NewUserHandler(userRepo, teamRepo, profileRepo)
+	profileHandler := handlers.NewProfileHandler(profileRepo)
+	authHandler := handlers.NewAuthHandler(profileRepo, teamRepo)
+
+	handlers := routers.Handlers{
+		UserHandler:    userHandler,
+		ProfileHandler: profileHandler,
+		AuthHandler:    authHandler,
+	}
+
+	router := routers.SetupRouter(handlers)
+	enhancedRouter := middlewares.AuthorizationMiddleware(
+		middlewares.EnableCORS(
+			middlewares.JsonContentTypeMiddleware(router),
+		),
+	)
 
 	// start the server
+	log.Println("Server is running on port 8080")
 	log.Fatal(http.ListenAndServe(":8000", enhancedRouter))
 }

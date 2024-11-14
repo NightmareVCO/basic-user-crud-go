@@ -6,15 +6,19 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func SetupRouter(userHandler *handlers.UserHandler) *mux.Router {
-	router := mux.NewRouter()
+type Handlers struct {
+	UserHandler    *handlers.UserHandler
+	ProfileHandler *handlers.ProfileHandler
+	AuthHandler    *handlers.AuthHandler
+}
 
-	// Rutas de usuarios
-	router.HandleFunc("/api/go/users", userHandler.GetUsers).Methods("GET")
-	router.HandleFunc("/api/go/users", userHandler.CreateUser).Methods("POST")
-	router.HandleFunc("/api/go/users/{id}", userHandler.GetUser).Methods("GET")
-	router.HandleFunc("/api/go/users/{id}", userHandler.UpdateUser).Methods("PUT")
-	router.HandleFunc("/api/go/users/{id}", userHandler.DeleteUser).Methods("DELETE")
+func SetupRouter(h Handlers) *mux.Router {
+	router := mux.NewRouter()
+	api := router.PathPrefix("/api/go").Subrouter()
+
+	h.UserHandler.RegisterUserRoutes(api)
+	h.ProfileHandler.RegisterProfileRoutes(api)
+	h.AuthHandler.RegisterAuthRoutes(api)
 
 	return router
 }

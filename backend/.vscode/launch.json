@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(Debug) Debug into Docker",
+      "type": "go",
+      "request": "attach",
+      "mode": "remote",
+      "remotePath": "/app",
+      "port": 2345,
+      "host": "127.0.0.1",
+      "showLog": true,
+      "preLaunchTask": "(Debug) Docker Compose Up"
+    },
+    {
+      "name": "(Hot Reload) Debug into Docker",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/main.go",
+      "preLaunchTask": "(Hot Reload) Docker Compose Up"
+    }
+  ]
+}

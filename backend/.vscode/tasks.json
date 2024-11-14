@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "(Debug) Docker Compose Up",
+      "type": "shell",
+      "command": "docker-compose up goapp_debug db --build",
+      "problemMatcher": []
+    },
+    {
+      "label": "(Hot Reload) Docker Compose Up",
+      "type": "shell",
+      "command": "docker-compose up goapp db --build",
+      "problemMatcher": []
+    }
+  ]
+}

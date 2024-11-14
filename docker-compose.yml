@@ -19,10 +19,33 @@ services:
     build:
       context: ./backend
       dockerfile: go.dockerfile
+      target: reload
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      - ENCRYPTION_KEY=7a34ff36240775e4236935eb4afc8f389c24d6de050853f73206de712d1eaa8f
+      - JWT_SECRET=5d52e06e477175db56161bf17b544710850c14cb8b3cc2ce5e42330c001ceb4e
     ports:
       - 8000:8000
+    security_opt:
+      - seccomp:unconfined
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+
+  goapp_debug:
+    container_name: goapp_debug
+    build:
+      context: ./backend
+      dockerfile: go.dockerfile
+      target: debug
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      - ENCRYPTION_KEY=7a34ff36240775e4236935eb4afc8f389c24d6de050853f73206de712d1eaa8f
+      - JWT_SECRET=5d52e06e477175db56161bf17b544710850c14cb8b3cc2ce5e42330c001ceb4e
+    ports:
+      - 8000:8000
+      - 2345:2345
     depends_on:
       - db
     volumes:

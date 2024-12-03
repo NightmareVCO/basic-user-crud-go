@@ -41,9 +41,9 @@ export const getUsers = async (getUsersParameters: GetUsersParameters) => {
       return [];
     }
 
-    return users;
-  } catch {
-    console.error("Error fetching users");
+    return users?.length > 0 ? users : [];
+  } catch (error) {
+    console.error("Error fetching users: " + error);
     return [];
   }
 };

@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  headers: async () => {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

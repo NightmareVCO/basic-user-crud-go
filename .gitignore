@@ -2,3 +2,4 @@
 config-ssh
 api
 backend/api
+.env

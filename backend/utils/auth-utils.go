@@ -20,7 +20,7 @@ func GenerateJWT(profileID int) (string, error) {
 	//encryp the profile id
 	encryptedProfileID, err := Encrypt(profileIDBytes, os.Getenv("ENCRYPTION_KEY"))
 	if err != nil {
-		log.Fatal("Error al encriptar la contraseña:", err)
+		log.Fatal("Error al encriptar el ID:", err)
 	}
 
 	claims := jwt.MapClaims{

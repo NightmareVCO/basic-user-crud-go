@@ -25,6 +25,7 @@ export async function loginUser(
   const apiUrl = process.env.PUBLIC_API_URL ?? "http://localhost:8000/api";
   const urlToFetch = `${apiUrl}/${BACKEND_NAME}/auth/login`;
   const { email, password } = Object.fromEntries(formData);
+  const lowerCaseEmail = (email as string).toLowerCase();
 
   try {
     const response = await fetch(urlToFetch, {
@@ -32,7 +33,7 @@ export async function loginUser(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ lowerCaseEmail, password }),
       cache: "force-cache",
     });
     console.log(response);
@@ -66,6 +67,7 @@ export async function registerUser(
   const apiUrl = process.env.PUBLIC_API_URL ?? "http://localhost:8000/api";
   const urlToFetch = `${apiUrl}/${BACKEND_NAME}/auth/register`;
   const { name, email, password } = Object.fromEntries(formData);
+  const lowerCaseEmail = (email as string).toLowerCase();
 
   try {
     const response = await fetch(urlToFetch, {
@@ -73,7 +75,7 @@ export async function registerUser(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, lowerCaseEmail, password }),
       cache: "force-cache",
     });
 

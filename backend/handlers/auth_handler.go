@@ -6,6 +6,7 @@ import (
 	"api/utils"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -72,6 +73,9 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
+
+	//lowercase email
+	registerData.Email = strings.ToLower(registerData.Email)
 
 	// decode the request body
 	err := json.NewDecoder(r.Body).Decode(&registerData)

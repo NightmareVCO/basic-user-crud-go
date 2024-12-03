@@ -24,14 +24,27 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
       - ENCRYPTION_KEY=7a34ff36240775e4236935eb4afc8f389c24d6de050853f73206de712d1eaa8f
       - JWT_SECRET=5d52e06e477175db56161bf17b544710850c14cb8b3cc2ce5e42330c001ceb4e
+    #   - DATABASE_URL=${DATABASE_URL}
+    #   - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+    #   - JWT_SECRET=${JWT_SECRET}
+    # user: "1000:1000"
     ports:
       - 8000:8000
+    # Solo usar en desarrollo
     security_opt:
       - seccomp:unconfined
     depends_on:
       - db
     volumes:
       - ./backend:/app
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1'
+    #       memory: 1024M
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 512M
 
   goapp_debug:
     container_name: goapp_debug
@@ -43,6 +56,10 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
       - ENCRYPTION_KEY=7a34ff36240775e4236935eb4afc8f389c24d6de050853f73206de712d1eaa8f
       - JWT_SECRET=5d52e06e477175db56161bf17b544710850c14cb8b3cc2ce5e42330c001ceb4e
+    #   - DATABASE_URL=${DATABASE_URL}
+    #   - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+    #   - JWT_SECRET=${JWT_SECRET}
+    # user: "1000:1000"
     ports:
       - 8000:8000
       - 2345:2345
@@ -50,6 +67,14 @@ services:
       - db
     volumes:
       - ./backend:/app
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1'
+    #       memory: 1024M
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 512M
 
   db:
     container_name: db
@@ -58,6 +83,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+      # POSTGRES_USER: ${POSTGRES_USER}
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # POSTGRES_DB: ${POSTGRES_DB}
+      # user: "1000:1000"
     ports:
       - 5432:5432
     volumes:

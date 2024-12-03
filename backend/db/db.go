@@ -20,7 +20,7 @@ func Connect(cfg config.Config) *sql.DB {
 	}
 
 	// users
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name TEXT, email TEXT, status BOOLEAN DEFAULT TRUE)")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name TEXT UNIQUE, email TEXT, status BOOLEAN DEFAULT TRUE)")
 	if err != nil {
 		log.Fatal("Error al crear la tabla de usuarios:", err)
 	}
@@ -66,7 +66,7 @@ func Connect(cfg config.Config) *sql.DB {
 	}
 
 	// inserting admin team if not exists
-	_, err = db.Exec("INSERT INTO teams (name, profile_owner) SELECT 'admin', id FROM users WHERE name = 'admin' AND NOT EXISTS (SELECT 1 FROM teams WHERE profile_owner = (SELECT id FROM users WHERE name = 'admin'))")
+	_, err = db.Exec("INSERT INTO teams (name, profile_owner) SELECT 'admin', id FROM users WHERE name = 'admin' AND NOT EXISTS (SELECT 1 FROM teams WHERE profile_owner = (SELECT id FROM users WHERE name = 'admin' LIMIT 1))")
 	if err != nil {
 		log.Fatal("Error al insertar el equipo administrador:", err)
 	}

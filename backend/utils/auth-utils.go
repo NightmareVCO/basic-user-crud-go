@@ -2,7 +2,9 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -13,8 +15,16 @@ var secretKey = []byte(os.Getenv("JWT_SECRET"))
 
 func GenerateJWT(profileID int) (string, error) {
 	// Crear las claims del token, que incluyen el ID del perfil y la fecha de expiración
+
+	profileIDBytes := []byte(fmt.Sprintf("%d", profileID))
+	//encryp the profile id
+	encryptedProfileID, err := Encrypt(profileIDBytes, os.Getenv("ENCRYPTION_KEY"))
+	if err != nil {
+		log.Fatal("Error al encriptar la contraseña:", err)
+	}
+
 	claims := jwt.MapClaims{
-		"profile_id": profileID,                             // Aquí guardamos el ID del perfil
+		"profile_id": encryptedProfileID,                    // Aquí guardamos el ID del perfil encriptado
 		"exp":        time.Now().Add(time.Hour * 24).Unix(), // Expiración en 24 horas
 		"iat":        time.Now().Unix(),                     // Añadir tiempo de emisión
 	}
@@ -50,10 +60,27 @@ func ParseJWT(tokenString string) (int, error) {
 
 	// Extraer y convertir las claims si la validación es exitosa
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		// Convertir el perfil ID a int
-		profileID := int(claims["profile_id"].(float64))
-		return profileID, nil
+		descryptedProfileID, err := DecryptJWTInfo(claims["profile_id"].(string), os.Getenv("ENCRYPTION_KEY"))
+		if err != nil {
+			return 0, err
+		}
+
+		return descryptedProfileID, nil
 	}
 
 	return 0, fmt.Errorf("token inválido")
+}
+
+func DecryptJWTInfo(ciphertext string, keyString string) (int, error) {
+	decryptedProfileID, err := Decrypt(ciphertext, keyString)
+	if err != nil {
+		return 0, err
+	}
+
+	profileID, err := strconv.Atoi(string(decryptedProfileID))
+	if err != nil {
+		return 0, err
+	}
+
+	return profileID, nil
 }

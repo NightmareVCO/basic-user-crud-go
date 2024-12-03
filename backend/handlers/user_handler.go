@@ -58,6 +58,10 @@ func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	profileID := r.Context().Value("profileID").(int)
+	if profileID == 0 {
+		http.Error(w, "ID de perfil no encontrado", http.StatusUnauthorized)
+		return
+	}
 
 	teamID, err := h.TeamRepo.GetTeamByOwnerProfileID(profileID)
 	if err != nil {
@@ -83,6 +87,10 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	profileID := r.Context().Value("profileID").(int)
+	if profileID == 0 {
+		http.Error(w, "ID de perfil no encontrado", http.StatusUnauthorized)
+		return
+	}
 
 	teamID, err := h.TeamRepo.GetTeamByOwnerProfileID(profileID)
 	if err != nil {
@@ -115,6 +123,10 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	profileID := r.Context().Value("profileID").(int)
+	if profileID == 0 {
+		http.Error(w, "ID de perfil no encontrado", http.StatusUnauthorized)
+		return
+	}
 
 	teamID, err := h.TeamRepo.GetTeamByOwnerProfileID(profileID)
 	if err != nil {
